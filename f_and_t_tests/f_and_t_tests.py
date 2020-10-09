@@ -52,16 +52,20 @@ JSN = pd.concat([JSL, JSM], axis=1)
 #grab knees w/ ONLY JSL. no JSM
 JSL_ID = JSN.loc[JSN.L_grade > 0.0]
 JSL_ID = JSL_ID.loc[JSL_ID.M_grade == 0.0]
+print ("Number of subjects with only lateral JSN = " + str(len(JSL_ID)))
+print JSL_ID
 
 #grab knees w/ ONLY JSM. no JSL
 JSM_ID = JSN.loc[JSN.M_grade > 0.0]
 JSM_ID = JSM_ID.loc[JSM_ID.L_grade == 0.0]
+print ("Number of subjects with only medial JSN = " + str(len(JSM_ID)))
+print JSM_ID
 
 #grab knees w/ ONLY no JSN.
 noJSN_ID = JSN.loc[JSN.M_grade == 0.0]
 noJSN_ID = noJSN_ID.loc[noJSN_ID.L_grade == 0.0]
-
-
+print ("Number of subjects with no JSN = " + str(len(noJSN_ID)))
+print noJSN_ID
 
 #grab subchondral lengths
 #JSL only
@@ -119,11 +123,17 @@ def runTandFTest(dataN, dataNo, fileName):
 		result = result.append(new_row, ignore_index=True)
 	result.to_csv(fileName)
 
+print ("running T and F test tibia JSL vs tibia no JSN")
 result_tibia_lateral = runTandFTest(tibia_JSL, tibia_noJSN, 'tibia_lateral.csv')
-result_femur_lateral = runTandFTest(femur_JSL, femur_noJSN, 'femur_lateral.csv')
-result_femur_lateral = runTandFTest(femur_JSM, femur_noJSN, 'femur_medial.csv')
-result_tibia_medial = runTandFTest(tibia_JSL, tibia_noJSN, 'tibia_medial.csv')
 
+print ("running T and F test femur JSL vs femur no JSN")
+result_femur_lateral = runTandFTest(femur_JSL, femur_noJSN, 'femur_lateral.csv')
+
+print ("running T and F test femur JSM vs femur no JSN")
+result_femur_lateral = runTandFTest(femur_JSM, femur_noJSN, 'femur_medial.csv')
+
+print ("running T and F test tibia JSM vs tibia no JSN")
+result_tibia_medial = runTandFTest(tibia_JSM, tibia_noJSN, 'tibia_medial.csv')
 
 """
 plt.figure(); tibia_noJSN.boxplot()
