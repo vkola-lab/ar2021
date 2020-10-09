@@ -105,7 +105,7 @@ def runTandFTest(dataN, dataNo, fileName):
 		t_yes = ''
 		f_yes = ''
 		noJSNData = dataNo.loc[:, JSNName]
-		t, p_t = stats.ttest_ind(JSNData, noJSNData)
+		t, p_t = stats.ttest_ind(JSNData, noJSNData, equal_var = False)
 		f, p_f = f_test(JSNData, noJSNData)
 
 		if p_t < 0.05:
