@@ -107,11 +107,19 @@ def runTandFTest(dataN, dataNo, fileName):
 		noJSNData = dataNo.loc[:, JSNName]
 		t, p_t = stats.ttest_ind(JSNData, noJSNData, equal_var = False)
 		f, p_f = f_test(JSNData, noJSNData)
-
 		if p_t < 0.05:
 			t_yes = 'significant'
 		if p_f < 0.05:
 			f_yes = 'significant'
+
+		if p_t < 0.0001:
+			p_t = 'p<0.0001'
+		elif p_t < 0.001:
+			p_t = 'p<0.001'
+		elif p_t < 0.01:
+			p_t = round(p_t,3)
+		else:
+			p_t = round(p_t,2)
 
 		new_row = {'t':t, 
 			'p_t': p_t, 
