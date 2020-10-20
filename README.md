@@ -55,40 +55,48 @@ Please note that the dependencies require Python 3.6 or greater. We recommend in
 #### Data files
 Pairs of images and masks of segmentation should be put in:
 ```bash
-data/CASE_NAME/train_imgs/*.npy
-data/CASE_NAME/train_masks/*.npy
+data/CASE_NAME/train_imgs/*.png
+data/CASE_NAME/train_masks/*.png
 ```
 for training dataset and
 ```bash
-data/CASE_NAME/eval_imgs/*.npy
-data/CASE_NAME/eval_masks/*.npy
+data/CASE_NAME/eval_imgs/*.png
+data/CASE_NAME/eval_masks/*.png
 ```
-for validation dataset. 
-The labels used for classification should be put as:
+for validation dataset.
+The images for testing the segmentation results should be put in:
+```bash
+data/CASE_NAME/test_imgs/*.png
+```
+And the segmentation results will be created in:
+```bash
+data/CASE_NAME/test_masks/*.png
+```
+And the labels used for classification should be put as:
 ```bash
 data/CASE_NAME/label.npy
 ```
 
 ## <a name="Arguments"></a>Arguments
 
-1 . `--rp`:
->> Run using multiple GPUs in parallel.
+`--case_name`:
+>> name of the study.
 
-2 .  `--r`:
->> Run along with linear registration.
+`--epochs`: *int*
+>> Number of epochs.
 
-3 . `--c`:
->> Run using the saved checkpoints.
+`-b`: *int*
+>> Batch size
 
-4 . `--lr`: *float*
+`--bu`: *int*
+>> Batch size for accumulated gradient.
+
+`--lr`: *float*
 >> Learning rate, default is 1e-4
 
-5 . `--gamma`: *float*
+`--ini`:
+>> name of the saved .ini file
 
->> Learning rate decay, default is 1.0
 
-6 . `--epochs`: *int*
->> Number of epochs, default is 500
 
-7 . `--bs`: *int*
->> Batch size, default is 64
+
