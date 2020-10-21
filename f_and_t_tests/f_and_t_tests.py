@@ -2,9 +2,9 @@ import csv
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from scipy import stats
 import scipy
-
 
 plt.rcParams.update({'font.size': 14})
 
@@ -100,13 +100,25 @@ def runTandFTest(dataN, dataNo, fileName):
 	'p_f': [],
 	'p_f_sig': []}
 	result = pd.DataFrame(results)
+	slice = 0.0
+	slice_list = []
+	t_list = []
+	p_t_list = []
 
 	for (JSNName, JSNData) in dataN.iteritems():
+		
 		t_yes = ''
 		f_yes = ''
 		noJSNData = dataNo.loc[:, JSNName]
 		t, p_t = stats.ttest_ind(JSNData, noJSNData, equal_var = False)
 		f, p_f = f_test(JSNData, noJSNData)
+		t = round(t,2)
+
+		t_list.append(t)
+		p_t_list.append(p_t)
+		slice_list.append(slice/200)
+		slice = slice + 1
+
 		if p_t < 0.05:
 			t_yes = 'significant'
 		if p_f < 0.05:
@@ -129,19 +141,101 @@ def runTandFTest(dataN, dataNo, fileName):
 			'p_f_sig': f_yes}
 
 		result = result.append(new_row, ignore_index=True)
+
 	result.to_csv(fileName)
+	return (t_list, p_t_list, slice_list)
+
+#function that plots T test results
+def plotStatResults(t_list, p_t_list, slice_list, title):
+	colors = []
+	for p_t in p_t_list:
+		if p_t < 0.0001:
+			colors.append('darkred')
+		elif p_t < 0.001:
+			colors.append('red')
+		elif p_t < 0.01:
+			colors.append('orange')
+		elif p_t <0.05:
+			colors.append('yellow')
+		else:
+			colors.append('green')
+
+	fig, ax = plt.subplots(figsize = (10,6))
+	fig.figsize = (10,6)
+	scatter = ax.scatter(slice_list, t_list, s=15, c=colors, alpha =0.5)
+	color_legend = ['darkred', 'red', 'orange', 'yellow', 'green']
+	lines = [Line2D([], [], color= c, markersize=3, linewidth=0, marker='o') for c in color_legend]
+	labels = ['p<0.0001', 'p<0.001', 'p<0.01', 'p<0.05', 'p>=0.05']
+
+	ax.legend(lines, labels, prop={'size':10})
+	plt.title(title)
+	plt.show()
+
+#function that calculates difference between means (for each slice) of dataset with JSN vs dataset without JSN
+def diffMeans(dataN, dataNo):
+	diff_mean = []
+
+	for (JSNName, JSNData) in dataN.iteritems():
+		noJSNData = dataNo.loc[:, JSNName]
+
+		noJSNData = noJSNData.values.tolist()
+		JSNData = JSNData.values.tolist()
+		noJSNData = np.array(noJSNData)
+		JSNData = np.array(JSNData)
+
+		mean_noJSN = np.mean(noJSNData)
+		mean_JSN = np.mean(JSNData)
+
+		diff = mean_JSN - mean_noJSN
+		diff_mean.append(diff)
+
+	return diff_mean
 
 print ("running T and F test tibia JSL vs tibia no JSN")
-result_tibia_lateral = runTandFTest(tibia_JSL, tibia_noJSN, 'tibia_lateral.csv')
+t, p_t, slice = runTandFTest(tibia_JSL, tibia_noJSN, 'tibia_lateral.csv')
+diff_mean = diffMeans(tibia_JSL, tibia_noJSN)
+
+title = 'T test: Tibia with JSN Lateral vs. Tibia with no JSN'
+plotStatResults(t, p_t, slice, title)
+
+title = 'Difference Between Means: Tibia with JSN Lateral vs. Tibia with no JSN'
+plotStatResults(diff_mean, p_t, slice, title)
+
+
 
 print ("running T and F test femur JSL vs femur no JSN")
-result_femur_lateral = runTandFTest(femur_JSL, femur_noJSN, 'femur_lateral.csv')
+t, p_t, slice = runTandFTest(femur_JSL, femur_noJSN, 'femur_lateral.csv')
+diff_mean = diffMeans(femur_JSL, femur_noJSN)
+
+title = 'T test: Femur with JSN Lateral vs. Femur with no JSN'
+plotStatResults(t, p_t, slice, title)
+
+title = 'Difference Between Means: Femur with JSN Lateral vs. Femur with no JSN'
+plotStatResults(diff_mean, p_t, slice, title)
+
+
 
 print ("running T and F test femur JSM vs femur no JSN")
-result_femur_lateral = runTandFTest(femur_JSM, femur_noJSN, 'femur_medial.csv')
+t, p_t, slice = runTandFTest(femur_JSM, femur_noJSN, 'femur_medial.csv')
+diff_mean = diffMeans(femur_JSM, femur_noJSN)
+
+title = 'T test: Femur with JSN Medial vs. Femur with no JSN'
+plotStatResults(t, p_t, slice, title)
+
+title = 'Difference Between Means: Femur with JSN Medial vs. Femur with no JSN'
+plotStatResults(diff_mean, p_t, slice, title)
+
+
 
 print ("running T and F test tibia JSM vs tibia no JSN")
-result_tibia_medial = runTandFTest(tibia_JSM, tibia_noJSN, 'tibia_medial.csv')
+t, p_t, slice = runTandFTest(tibia_JSM, tibia_noJSN, 'tibia_medial.csv')
+diff_mean = diffMeans(tibia_JSM, tibia_noJSN)
+
+title = 'T test: Tibia with JSN Medial vs. Tibia with no JSN'
+plotStatResults(t, p_t, slice, title)
+
+title = 'Difference Between Means: Tibia with JSN Medial vs. Tibia with no JSN'
+plotStatResults(diff_mean, p_t, slice, title)
 
 """
 plt.figure(); tibia_noJSN.boxplot()
