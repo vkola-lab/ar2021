@@ -40,6 +40,9 @@ tibia_medial.csv (tibia with no JSN vs tibia with JSN in medial)
 
 Each row is a slice.
 
+Script will also plot the T test results as a scatter plot.
+Script will also plot the difference of means for each slice, color coded by the T test p values.
+
 ## Knee Shape Segmentation and Classification
 #### Prerequisites
 
