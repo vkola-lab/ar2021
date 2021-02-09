@@ -2,10 +2,7 @@
 
 This is the repository of the 2021 paper "Population-level measurement of cartilage and bone in knee osteoarthritis and their association with imaging markers using deep learning"
 
-## Segmentation of MRI-Based Knee Shape
-
-## Knee Shape Segmentation and Classification
-#### Prerequisites
+## Prerequisites
 
 The tool was developed based on the following dependencies:
 
@@ -14,6 +11,8 @@ The tool was developed based on the following dependencies:
 3. NumPy (1.16 or later).
 4. Scipy (1.30 or later)
 5. scikit-learn (0.21.2 or later)
+
+## Segmentation of MRI-Based Knee Shape
 
 #### Data files
 Pairs of images and masks of segmentation should be put in:
