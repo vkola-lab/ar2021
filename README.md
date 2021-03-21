@@ -7,10 +7,28 @@ This is the repository of the 2021 paper "Population-level measurement of cartil
 The tool was developed based on the following dependencies:
 
 1. PyTorch (1.1 or later).
-2. PyTorch Lightning (1.7 or later).
+2. PyTorch Lightning (1.3 or later).
 3. NumPy (1.16 or later).
 4. Scipy (1.30 or later)
 5. scikit-learn (0.21.2 or later)
+6. Tensorboard
+
+## Project Structures
+
+    ├── checkpoints              # Saved checkpoints of the U-Net models
+    ├── data                     
+        ├── dess_annotated       # DESS MRI images with bone and cartilages annotations
+        ├── dess_mri             # DESS MRI for predictions
+        ├── predicted            # Predicted bone and cartilages masks
+    ├── engine                   # Engine of Pytorch Lightning
+    ├── loaders                  # Loaders for knee DESS MRI images and annotations
+    ├── logs                     # Training logs of Pytorch
+    ├── models                   # Definition of Pytorch models
+    ├── utils                    # Tools to create segmentations and to  perform statistical analysis
+        ├── SBL_calculate.py     # calculate SBL based on predicted bone and cartilages masks
+        ├── SBL_statistics.py    # Statistical analysis of SBL data
+    ├── ln_segmentation.py       # main script to perform traning and testing of bone and cartilage segmentation
+    └── README.md
 
 ## Segmentation of MRI-Based Knee Shape
 
@@ -37,15 +55,15 @@ data/CASE_NAME/test_masks/*.png
 
 #### Preprocessing
 ```bash
-python ln_main.py -t pre -d eval
+python ln_segmentation.py -t pre -d eval
 ```
 #### Neural Network Training of Segmentation
 ```bash
-python ln_main.py -t seg -d train
+python ln_segmentation.py -t seg -d train
 ```
 #### Neural Network Interference of Segmentation
 ```bash
-python ln_main.py -t seg -d eval
+python ln_segmentation.py -t seg -d eval
 ```
 
 ## Stastistics
