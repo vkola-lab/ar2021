@@ -17,17 +17,28 @@ The tool was developed based on the following dependencies:
 
     ├── checkpoints              # Saved checkpoints of the U-Net models
     ├── data                     
-        ├── dess_annotated       # DESS MRI images with bone and cartilages annotations
+        ├── dess_annotated       # Annotated DESS MRI images for training of the neural network
+            ├── img                MRI images in .jpg format
+                ├── 1_10.jpg
+                ├── ...
+            ├── masks
+                ├── fc             Annotated masks of femur cartilage (fc), medial tibia cartilage (mtc), lateral tibia cartilage (ltc), etc...
+                    ├── 1_10.jpg
+                    ├── ...
+                ├── mtc
+                ├── ltc
+                ├── ...
         ├── dess_mri             # DESS MRI for predictions
         ├── predicted            # Predicted bone and cartilages masks
     ├── engine                   # Engine of Pytorch Lightning
     ├── loaders                  # Loaders for knee DESS MRI images and annotations
     ├── logs                     # Training logs of Pytorch
     ├── models                   # Definition of Pytorch models
-    ├── utils                    # Tools to create segmentations and to  perform statistical analysis
-        ├── SBL_calculate.py     # calculate SBL based on predicted bone and cartilages masks
+    ├── dess_utils               # Tools to create segmentations and to perform statistical analysis
+        ├── dess_prediction.py   # calculate SBL based on predicted bone and cartilages masks
+        ├── dess_process.py      # cleaning segmentation results, create SBL based on predicted bone and cartilages masks
         ├── SBL_statistics.py    # Statistical analysis of SBL data
-    ├── ln_segmentation.py       # main script to perform traning and testing of bone and cartilage segmentation
+    ├── ln_segmentation.py       # main script to perform model traning of bone and cartilage segmentation
     └── README.md
 
 ## Segmentation of MRI-Based Knee Shape
