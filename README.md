@@ -30,15 +30,15 @@ The tool was developed based on the following dependencies:
                 ├── ...
         ├── dess_mri             # DESS MRI for predictions
         ├── predicted            # Predicted bone and cartilages masks
-    ├── engine                   # Engine of Pytorch Lightning
-    ├── loaders                  # Loaders for knee DESS MRI images and annotations
-    ├── logs                     # Training logs of Pytorch
-    ├── models                   # Definition of Pytorch models
     ├── dess_utils               # Tools to create segmentations and to perform statistical analysis
         ├── dess_prediction.py   # calculate SBL based on predicted bone and cartilages masks
         ├── dess_process.py      # cleaning segmentation results, create SBL based on predicted bone and cartilages masks
         ├── SBL_statistics.py    # Statistical analysis of SBL data
+    ├── engine                   # Engine of Pytorch Lightning
     ├── ln_segmentation.py       # main script to perform model traning of bone and cartilage segmentation
+    ├── loaders                  # Loaders for knee DESS MRI images and annotations
+    ├── logs                     # Training logs of Pytorch
+    ├── models                   # Definition of Pytorch models
     └── README.md
 
 ## Segmentation of MRI-Based Knee Shape
