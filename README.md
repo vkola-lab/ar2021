@@ -1,6 +1,7 @@
-# Boneshape
+# Subchondral bone length
 
-This is the repository of the 2021 paper "Population-level measurement of cartilage and bone in knee osteoarthritis and their association with imaging markers using deep learning"
+This is the repository of the 2021 paper "Subchondral bone length in knee osteoarthritis: A deep learning driven imaging measure and its association with
+radiographic and clinical outcomes"
 
 ## Prerequisites
 
