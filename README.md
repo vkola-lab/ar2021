@@ -1,7 +1,4 @@
-# Subchondral bone length
-
-This is the repository of the 2021 paper "Subchondral bone length in knee osteoarthritis: A deep learning driven imaging measure and its association with
-radiographic and clinical outcomes"
+# Subchondral bone length in knee osteoarthritis: A deep learning driven imaging measure and its association with radiographic and clinical outcomes
 
 ## Prerequisites
 
