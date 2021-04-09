@@ -90,16 +90,16 @@ cd ~/boneshape/sbl_OR/
 python3 sbl_boxplot.py
 ```
 #### Prerequisites
-SBL data in ~/boneshape/df_extracted/SBL.csv. Each row corresponds to a patient.
-merge1.csv in ~/boneshape/df_extracted/merge1.csv contains the clinical data. Each row corresponds to a patient, while each column corresponds to demographic/clinical info.
+SBL data in ~/boneshape/df_extracted/SBL_0904.csv. Each row corresponds to a subject knee.
+merge1.csv in ~/boneshape/df_extracted/merge1.csv contains the clinical data. Each row corresponds to a patient, while each column corresponds to demographic/clinical info. Index order must be maintained in merge1.csv and SBL_0904.csv.
 
 Dependencies include:
-1. pandas
-2. numpy
-3. scipy.stats
-4. matplotlib
-5. scikit-learn
-6. seaborn
+1. pandas version 1.1.5
+2. numpy version 1.19.5
+3. scipy version 1.5.4
+4. matplotlib version 3.3.4
+5. seaborn version 0.11.1
+6. sklearn version 0.24.1
 7. colorsys
 
 #### Results
