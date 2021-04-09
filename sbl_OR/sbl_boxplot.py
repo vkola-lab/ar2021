@@ -1,13 +1,23 @@
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
+import scipy
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+import sklearn
 import matplotlib
 import seaborn as sns
 import matplotlib.colors as mc
 import colorsys
 from scipy.stats import ttest_ind
+
+print('pandas version ' + pd.__version__)
+print('numpy version ' + np.__version__)
+print('scipy version ' + scipy.__version__)
+print('matplotlib version ' + matplotlib.__version__)
+print('seaborn version ' + sns.__version__)
+print('sklearn version ' + sklearn.__version__)
+
 
 ###############
 # Preparation
@@ -17,8 +27,6 @@ cli = pd.read_csv('df_extracted/merge1.csv')
 sbl = pd.read_csv('df_extracted/SBL_0904.csv')  # Lateral 0-200 Medial
 sbl_col_names = ['F' + str(i) for i in range(200)] + ['T' + str(i) for i in range(200)]
 
-imorphics = pd.read_csv('df_extracted/imorphics.csv')
-imorphics = pd.merge(cli, imorphics, how='inner')
 
 ###############
 # normalize SBL
@@ -215,5 +223,4 @@ for outcome in outcomes.keys():
         get_OR(x=x, outcome=outcomes[outcome],
                condition=conditions[condition])
     print('')
-
 
