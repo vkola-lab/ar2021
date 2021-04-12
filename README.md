@@ -26,17 +26,16 @@ The tool was developed based on the following dependencies:
                 ├── mtc
                 ├── ltc
                 ├── ...
-        ├── dess_mri             # DESS MRI for predictions
-        ├── predicted            # Predicted bone and cartilages masks
+        ├── testing              # DESS MRI for predictions
     ├── dess_utils               # Tools to create segmentations and to perform statistical analysis
-        ├── dess_prediction.py   # calculate SBL based on predicted bone and cartilages masks
-        ├── dess_process.py      # cleaning segmentation results, create SBL based on predicted bone and cartilages masks
         ├── SBL_statistics.py    # Statistical analysis of SBL data
     ├── engine                   # Engine of Pytorch Lightning
     ├── loaders                  # Loaders for knee DESS MRI images and annotations
     ├── logs                     # Training logs of Pytorch
     ├── models                   # Definition of Pytorch models
     ├── ln_segmentation.py       # main script to perform model traning of bone and cartilage segmentation
+    ├── prediction.py            # calculate SBL based on predicted bone and cartilages masks
+    ├── postprocess.py           # cleaning segmentation results, create SBL based on predicted bone and cartilages masks
     └── README.md
 
 ## Segmentation of MRI-Based Knee Shape
@@ -62,17 +61,18 @@ And the segmentation results will be created in:
 data/CASE_NAME/test_masks/*.png
 ```
 
-#### Preprocessing
+#### Neural Network Training of Automatic Segmentation
 ```bash
-python ln_segmentation.py -t pre -d eval
+python ln_segmentation.py
 ```
-#### Neural Network Training of Segmentation
+#### Sample Scripts for prediction of bone and cartilage segmentation
 ```bash
-python ln_segmentation.py -t seg -d train
+python prediction.py
 ```
-#### Neural Network Interference of Segmentation
+
+#### Sample Scripts for Postprocessing
 ```bash
-python ln_segmentation.py -t seg -d eval
+python postprocess.py
 ```
 
 ## Stastistics
