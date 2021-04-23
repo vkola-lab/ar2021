@@ -100,6 +100,7 @@ def sbl_boxplot(data, text, baseline):
 baseline_femur = (sbl_femur.loc[(sbl_femur['V00XRJSM'] == 0) & (sbl_femur['V00XRJSL'] == 0), ['loc', 'sbl']])
 baseline_tibia = (sbl_tibia.loc[(sbl_tibia['V00XRJSM'] == 0) & (sbl_tibia['V00XRJSL'] == 0), ['loc', 'sbl']])
 
+"""
 for jsm in range(0, 4):
     sbl_boxplot(data=(sbl_femur.loc[(sbl_femur['V00XRJSM'] == jsm) & (sbl_femur['V00XRJSL'] == 0), ['loc', 'sbl']]),
                 text='Femur, JSN Medial=' + str(jsm), baseline=baseline_femur)
@@ -111,6 +112,7 @@ for jsl in range(0, 4):
                 text='Femur, JSN Lateral=' + str(jsl), baseline=baseline_femur)
     sbl_boxplot(data=(sbl_tibia.loc[(sbl_tibia['V00XRJSM'] == 0) & (sbl_tibia['V00XRJSL'] == jsl), ['loc', 'sbl']]),
                 text='Tibia, JSN Lateral=' + str(jsl), baseline=baseline_tibia)
+"""
 
 ################
 # sbl difference
@@ -166,7 +168,7 @@ sbl_jsn_0_mean = sbl.loc[(cli['V00XRJSM'] == 0) & (cli['V00XRJSL'] == 0), sbl_co
 #sbl_pain_0_mean = sbl.loc[cli['V00WOMKP#'] == 0, sbl_col_names].values.mean(0)
 baseline = sbl_jsn_0_mean
 
-
+"""
 # plot the difference in sbl compared to baselines
 plot_sbl_difference(sbl, text='KL', condition=cli['V00XRKL'],
                     condition_values=[0, 1, 2, 3, 4], baseline=baseline)
@@ -174,7 +176,7 @@ plot_sbl_difference(sbl, text='JSN Medial', condition=cli['V00XRJSM'],
                     condition_values=[0, 1, 2, 3], baseline=baseline)
 plot_sbl_difference(sbl, text='JSN Lateral', condition=cli['V00XRJSL'],
                     condition_values=[0, 1, 2, 3], baseline=baseline)
-
+"""
 #####################
 # Calculate Odd Ratio
 #####################
@@ -192,13 +194,13 @@ def get_OR(x, outcome, condition):
     i = 0
 
     #find outcome data for subjects in 1st quantile
-    found = outcome[(x > quantile[i]) & (x <= quantile[i + 1])]
+    found = outcome[(x >= quantile[i]) & (x <= quantile[i + 1])]
     print("total number of subjects in 1st quantile" + str(found.shape[0]))
     OR[1, 0] = (found == 1).sum()
     OR[1, 1] = (found == 0).sum()
 
     #mean SBL difference abs in 1st quantile
-    test = x[(x > quantile[i]) & (x <= quantile[i + 1])]
+    test = x[(x >= quantile[i]) & (x <= quantile[i + 1])]
     print("mean, std, median of 1st quantile")
     print(test.mean())
     print(test.std())
