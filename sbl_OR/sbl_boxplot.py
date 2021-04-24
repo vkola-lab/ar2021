@@ -100,7 +100,7 @@ def sbl_boxplot(data, text, baseline):
 baseline_femur = (sbl_femur.loc[(sbl_femur['V00XRJSM'] == 0) & (sbl_femur['V00XRJSL'] == 0), ['loc', 'sbl']])
 baseline_tibia = (sbl_tibia.loc[(sbl_tibia['V00XRJSM'] == 0) & (sbl_tibia['V00XRJSL'] == 0), ['loc', 'sbl']])
 
-"""
+
 for jsm in range(0, 4):
     sbl_boxplot(data=(sbl_femur.loc[(sbl_femur['V00XRJSM'] == jsm) & (sbl_femur['V00XRJSL'] == 0), ['loc', 'sbl']]),
                 text='Femur, JSN Medial=' + str(jsm), baseline=baseline_femur)
@@ -112,7 +112,7 @@ for jsl in range(0, 4):
                 text='Femur, JSN Lateral=' + str(jsl), baseline=baseline_femur)
     sbl_boxplot(data=(sbl_tibia.loc[(sbl_tibia['V00XRJSM'] == 0) & (sbl_tibia['V00XRJSL'] == jsl), ['loc', 'sbl']]),
                 text='Tibia, JSN Lateral=' + str(jsl), baseline=baseline_tibia)
-"""
+
 
 ################
 # sbl difference
@@ -168,7 +168,6 @@ sbl_jsn_0_mean = sbl.loc[(cli['V00XRJSM'] == 0) & (cli['V00XRJSL'] == 0), sbl_co
 #sbl_pain_0_mean = sbl.loc[cli['V00WOMKP#'] == 0, sbl_col_names].values.mean(0)
 baseline = sbl_jsn_0_mean
 
-"""
 # plot the difference in sbl compared to baselines
 plot_sbl_difference(sbl, text='KL', condition=cli['V00XRKL'],
                     condition_values=[0, 1, 2, 3, 4], baseline=baseline)
@@ -176,7 +175,7 @@ plot_sbl_difference(sbl, text='JSN Medial', condition=cli['V00XRJSM'],
                     condition_values=[0, 1, 2, 3], baseline=baseline)
 plot_sbl_difference(sbl, text='JSN Lateral', condition=cli['V00XRJSL'],
                     condition_values=[0, 1, 2, 3], baseline=baseline)
-"""
+
 #####################
 # Calculate Odd Ratio
 #####################
@@ -186,33 +185,23 @@ def get_OR(x, outcome, condition):
     outcome = outcome.loc[condition]
     print("total number of subject w/ condition:" + str(outcome.shape[0]))
 
-    #find SBL quantile cuttoffs of subjects w/ condition
+    #find SBL quartile cuttoffs of subjects w/ condition
     quantile = [np.quantile(x, i) for i in [0, 0.25, 0.5, 0.75, 1]]
-    print("_______QUANTILE CUTOFFS_______")
+    print("_______QUARTILE CUTOFFS_______")
     print(quantile)
     OR = np.zeros((2, 2))
     i = 0
 
-    #find outcome data for subjects in 1st quantile
+    #find outcome data for subjects in 1st quartile
     found = outcome[(x >= quantile[i]) & (x <= quantile[i + 1])]
-    print("total number of subjects in 1st quantile" + str(found.shape[0]))
+    print("total number of subjects in quantile: " + str(found.shape[0]))
     OR[1, 0] = (found == 1).sum()
     OR[1, 1] = (found == 0).sum()
 
-    #mean SBL difference abs in 1st quantile
-    test = x[(x >= quantile[i]) & (x <= quantile[i + 1])]
-    print("mean, std, median of 1st quantile")
-    print(test.mean())
-    print(test.std())
-    print(test.median())
-    print("total number of subjects in 1st quantile" + str(test.shape[0]))
-
     to_print=''
-    #find outcome data for subjects in 2nd/3rd/4th quantile then compare w/ 1st quantile.
+    #find outcome data for subjects in 2nd/3rd/4th quartile then compare w/ 1st quartile.
     for i in range(1, 4):
         found = outcome[(x > quantile[i]) & (x <= quantile[i + 1])]
-        q = i + 1
-        print("total number of subjects in quantile" + str(q) + ": " + str(found.shape[0]))
         OR[0, 0] = (found == 1).sum()
         OR[0, 1] = (found == 0).sum()
 
@@ -229,7 +218,7 @@ def get_OR(x, outcome, condition):
         #print("Quantile: ", i + 1, "OR: ", oddsratio, "p-Value: %.4f"+significance % pvalue)
         to_print = to_print+("Q%d, OR: %.2f, p: %.4f"+significance+" CI: %.2f, %.2f") % (i + 1, oddsratio, pvalue, LCL, UCL) + '  '
     print("_______OUTCOMES TABLE for CALC ODDS RATIO________")
-    print("1st column = outcome true. 1st row = 1st quantile. 2nd row = 2nd/3rd/4th quantile")
+    print("1st column = outcome true. 1st row = 1st quartile. 2nd row = 2nd/3rd/4th quartile")
     print(OR)
     print("_______ODDS RATIO________")
     print(to_print)
@@ -240,7 +229,6 @@ sbl_difference = (sbl.loc[:, sbl_col_names].sub(baseline, axis=1))
 sbl_difference_absolute = sbl_difference.abs().sum(1)
 
 #get OR
-condition = (cli['V00XRKL'] >= 3)
 conditions = {'KL≥3': cli['V00XRKL'] >= 3,
               'JSN Medial≥1': cli['V00XRJSM'] >= 1,
               'JSN Lateral≥1': cli['V00XRJSL'] >= 1,}
@@ -253,9 +241,10 @@ outcomes = {'Moderate Pain:': ((cli['V00WOMKP#'] >= 4) & (cli['V00WOMKP#'] < 8))
 
 for outcome in outcomes.keys():
     for condition in conditions.keys():
-        print(outcome + ' | ' + condition)
+        print('******* ' + outcome + ' | ' + condition + ' *******')
         get_OR(x=sbl_difference_absolute, outcome=outcomes[outcome],
                condition=conditions[condition])
+        print('')
     print('')
 
 
@@ -266,42 +255,42 @@ for outcome in outcomes.keys():
 def get_stats(x, outcome, condition):
     x = x.loc[condition]
     outcome = outcome.loc[condition]
+
+    #create df w/ sbl_diff, outcomes, and quartile number.
     df = pd.DataFrame({'sbl_difference': x, 'outcome': outcome})
-    df.loc[(df['outcome'] == True), 'Q'] = pd.qcut(df['sbl_difference'], 4, labels=('Q1', 'Q2', 'Q3', 'Q4'))
-    df['Q'] = df.Q.astype(str)
+    quartile_label = pd.qcut(df['sbl_difference'], 4, labels=('Q1', 'Q2', 'Q3', 'Q4'))
+    df.insert(2, 'Q', quartile_label)
 
-    groups = df['Q']   
-    q1 = (groups == 'Q1')
-    q2 = (groups == 'Q2')  
-    q3 = (groups == 'Q3')
-    q4 = (groups == 'Q4')
-
-    q1.name = 'Quartile 1'
-    q2.name = 'Quartile 2'
-    q3.name = 'Quartile 3'
-    q4.name = 'Quartile 4'
-
-    stat = df['sbl_difference']
-    quartiles = [q1, q2, q3, q4]
+    quartiles = ['Q1', 'Q2', 'Q3', 'Q4']
+    #calculate mean/std/medial of each quartile
     for quartile in quartiles:
-        print("total subjects in " + quartile.name + ": " + str((quartile==1).sum()))
-        qmn = stat[quartile].mean()
-        qsd = stat[quartile].std()
-        qmd = stat[quartile].median()
-        print(quartile.name+' Mean: ', qmn, ' SD: ', qsd, ' Median: ', qmd)
+        q = df[df['Q'] == quartile]
+        q_stat = q['sbl_difference']
 
-conditions = {'JSN Medial≥1': cli['V00XRJSM'] >= 1,
-            'JSN Lateral≥1': cli['V00XRJSL'] >= 1}
+        #stats for quartile
+        print("__________________________")
+        print("total subjects in " + quartile + ": " + str(q.shape[0]))
+        qmn = q_stat.mean()
+        qsd = q_stat.std()
+        qmd = q_stat.median()
+        print(quartile +' Mean: ', qmn, ' SD: ', qsd, ' Median: ', qmd)
 
-outcomes = {'Moderate Pain:': ((cli['V00WOMKP#'] >= 4) & (cli['V00WOMKP#'] < 8)),
-            'Severe Pain:': (cli['V00WOMKP#'] >= 8),
-            'Moderate Disability:': ((cli['V00WOMADL#'] >= 20) & (cli['V00WOMADL#'] < 35)),
-            'Severe Disability:': (cli['V00WOMADL#'] >= 35),
-            'Future TKR': (cli['V99E#KRPSN'] >= 1)}
 
+        q_outcome_true = q[q['outcome'] == 1]
+        q_stat = q_outcome_true['sbl_difference']
+
+        #stats for quartile with outcome
+        print("total subjects w/ outcome in " + quartile + ": " + str(q_outcome_true.shape[0]))
+        qmn = q_stat.mean()
+        qsd = q_stat.std()
+        qmd = q_stat.median()
+        print(quartile +' Mean: ', qmn, ' SD: ', qsd, ' Median: ', qmd)
+
+#get OR stats
 for outcome in outcomes.keys():
     for condition in conditions.keys():
-        print(outcome + ' | ' + condition)
+        print('******* ' + outcome + ' | ' + condition + ' *******')
         get_stats(x=sbl_difference_absolute, outcome=outcomes[outcome],
                condition=conditions[condition])
+        print('')
     print('')
