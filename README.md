@@ -1,5 +1,7 @@
 # Subchondral bone length in knee osteoarthritis: A deep learning driven imaging measure and its association with radiographic and clinical outcomes
 
+This work is published in _Arthritis & Rheumatology_ (https://doi.org/10.1002/art.41808).
+
 ## Prerequisites
 
 The tool was developed based on the following dependencies:
